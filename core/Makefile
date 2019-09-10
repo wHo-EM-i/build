@@ -5391,10 +5391,12 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTA_FROM_TARGET_
 
 TARGET_PACKAGE := $(PRODUCT_OUT)/CAFExtended-$(CAFEX_VERSION)-$(TARGET_DEVICE)-$(CAFEX_BUILD_DATE)-$(CAFEX_BUILD_TYPE).zip
 
-.PHONY: otapackage bacon
+.PHONY: otapackage bacon cafex
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-  $(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_PACKAGE)
+bacon: cafex
+cafex: otapackage
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_PACKAGE)
 	$(hide) $(MD5) $(TARGET_PACKAGE) > $(TARGET_PACKAGE).md5sum
 	@echo -e ${CL_BLD}${CL_CYN}"===============================-Package complete-==============================="${CL_RST}
 	@echo -e ${CL_BLD}${CL_YLW}"Zip: "${CL_YLW} $(TARGET_PACKAGE)${CL_RST}
