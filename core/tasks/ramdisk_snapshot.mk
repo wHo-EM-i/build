@@ -13,22 +13,21 @@
 # limitations under the License.
 
 current_makefile := $(lastword $(MAKEFILE_LIST))
+# RAMDISK_SNAPSHOT_VERSION must be set to 'current' in order to generate a ramdisk snapshot.
+ifeq ($(RAMDISK_SNAPSHOT_VERSION),current)
 
-# RECOVERY_SNAPSHOT_VERSION must be set to 'current' in order to generate a recovery snapshot.
-ifeq ($(RECOVERY_SNAPSHOT_VERSION),current)
+.PHONY: ramdisk-snapshot
+ramdisk-snapshot: $(SOONG_RAMDISK_SNAPSHOT_ZIP)
 
-.PHONY: recovery-snapshot
-recovery-snapshot: $(SOONG_RECOVERY_SNAPSHOT_ZIP)
+$(call dist-for-goals, ramdisk-snapshot, $(SOONG_RAMDISK_SNAPSHOT_ZIP))
 
-$(call dist-for-goals, recovery-snapshot, $(SOONG_RECOVERY_SNAPSHOT_ZIP))
+else # RAMDISK_SNAPSHOT_VERSION is NOT set to 'current'
 
-else # RECOVERY_SNAPSHOT_VERSION is NOT set to 'current'
-
-.PHONY: recovery-snapshot
-recovery-snapshot: PRIVATE_MAKEFILE := $(current_makefile)
-recovery-snapshot:
+.PHONY: ramdisk-snapshot
+ramdisk-snapshot: PRIVATE_MAKEFILE := $(current_makefile)
+ramdisk-snapshot:
 	$(call echo-error,$(PRIVATE_MAKEFILE),\
-		"CANNOT generate Recovery snapshot. RECOVERY_SNAPSHOT_VERSION must be set to 'current'.")
+		"CANNOT generate Ramdisk snapshot. RAMDISK_SNAPSHOT_VERSION must be set to 'current'.")
 	exit 1
 
-endif # RECOVERY_SNAPSHOT_VERSION
+endif # RAMDISK_SNAPSHOT_VERSION
