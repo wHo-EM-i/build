@@ -1172,7 +1172,7 @@ dont_bother_goals := out \
 ifneq ($(EXTENDED_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-#$(eval include device/extended/sepolicy/common/sepolicy.mk)
+$(eval include device/extended/sepolicy/common/sepolicy.mk)
 endif
 
 # Make ANDROID Soong config variables visible to Android.mk files, for
